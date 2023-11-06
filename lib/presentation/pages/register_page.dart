@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_e_catalog/presentation/pages/home_page.dart';
-import 'package:flutter_e_catalog/presentation/pages/sign_up_page.dart';
+import 'package:flutter_e_catalog/presentation/pages/login_page.dart';
 
-class SignInPage extends StatelessWidget {
-  const SignInPage({super.key});
+class RegisterPage extends StatelessWidget {
+  const RegisterPage({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -13,6 +13,11 @@ class SignInPage extends StatelessWidget {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
+            const TextField(
+              decoration: InputDecoration(
+                labelText: 'Name',
+              ),
+            ),
             const TextField(
               decoration: InputDecoration(
                 labelText: 'Email',
@@ -34,11 +39,11 @@ class SignInPage extends StatelessWidget {
                   onPressed: () {
                     Navigator.of(context).push(
                       MaterialPageRoute(
-                        builder: (context) => const SignUpPage(),
+                        builder: (context) => const LoginPage(),
                       ),
                     );
                   },
-                  child: const Text('Sign Up'),
+                  child: const Text('Sign In'),
                 ),
                 const SizedBox(
                   width: 10,
@@ -51,7 +56,7 @@ class SignInPage extends StatelessWidget {
                       ),
                     );
                   },
-                  child: const Text('Sign In'),
+                  child: const Text('Sign Up'),
                 ),
               ],
             )
