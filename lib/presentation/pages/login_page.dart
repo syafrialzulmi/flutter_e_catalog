@@ -38,7 +38,7 @@ class LoginPage extends StatelessWidget {
                       ),
                     );
                   },
-                  child: const Text('Sign Up'),
+                  child: const Text('Don\'t have an account yet'),
                 ),
                 const SizedBox(
                   width: 10,

@@ -1,9 +1,39 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_e_catalog/presentation/pages/home_page.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+
+import 'package:flutter_e_catalog/bloc/register/register_bloc.dart';
+
+import 'package:flutter_e_catalog/data/models/request/register_request_model.dart';
+
 import 'package:flutter_e_catalog/presentation/pages/login_page.dart';
 
-class RegisterPage extends StatelessWidget {
+class RegisterPage extends StatefulWidget {
   const RegisterPage({super.key});
+
+  @override
+  State<RegisterPage> createState() => _RegisterPageState();
+}
+
+class _RegisterPageState extends State<RegisterPage> {
+  TextEditingController? nameController;
+  TextEditingController? emailController;
+  TextEditingController? passwordController;
+
+  @override
+  void initState() {
+    super.initState();
+    nameController = TextEditingController();
+    emailController = TextEditingController();
+    passwordController = TextEditingController();
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+    nameController!.dispose();
+    emailController!.dispose();
+    passwordController!.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -13,19 +43,22 @@ class RegisterPage extends StatelessWidget {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            const TextField(
-              decoration: InputDecoration(
+            TextField(
+              controller: nameController,
+              decoration: const InputDecoration(
                 labelText: 'Name',
               ),
             ),
-            const TextField(
-              decoration: InputDecoration(
+            TextField(
+              controller: emailController,
+              decoration: const InputDecoration(
                 labelText: 'Email',
               ),
             ),
-            const TextField(
+            TextField(
+              controller: passwordController,
               obscureText: true,
-              decoration: InputDecoration(
+              decoration: const InputDecoration(
                 labelText: 'Password',
               ),
             ),
@@ -43,20 +76,44 @@ class RegisterPage extends StatelessWidget {
                       ),
                     );
                   },
-                  child: const Text('Sign In'),
+                  child: const Text('Already have an account'),
                 ),
                 const SizedBox(
                   width: 10,
                 ),
-                ElevatedButton(
-                  onPressed: () {
-                    Navigator.of(context).pushReplacement(
-                      MaterialPageRoute(
-                        builder: (context) => const HomePage(),
-                      ),
+                BlocConsumer<RegisterBloc, RegisterState>(
+                  listener: (context, state) {
+                    if (state is RegisterLoaded) {
+                      nameController!.clear();
+                      emailController!.clear();
+                      passwordController!.clear();
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        SnackBar(
+                          content: Text(
+                              'Success register with id ${state.response.id}'),
+                        ),
+                      );
+                    }
+                  },
+                  builder: (context, state) {
+                    if (state is RegisterLoading) {
+                      return const Center(
+                        child: CircularProgressIndicator(),
+                      );
+                    }
+                    return ElevatedButton(
+                      onPressed: () {
+                        final registerRequestModel = RegisterRequestModel(
+                          name: nameController!.text,
+                          email: emailController!.text,
+                          password: passwordController!.text,
+                        );
+                        context.read<RegisterBloc>().add(
+                            SaveRegisterEvent(request: registerRequestModel));
+                      },
+                      child: const Text('Sign Up'),
                     );
                   },
-                  child: const Text('Sign Up'),
                 ),
               ],
             )
