@@ -65,58 +65,54 @@ class _RegisterPageState extends State<RegisterPage> {
             const SizedBox(
               height: 20,
             ),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                TextButton(
+            const SizedBox(
+              width: 10,
+            ),
+            BlocConsumer<RegisterBloc, RegisterState>(
+              listener: (context, state) {
+                if (state is RegisterLoaded) {
+                  nameController!.clear();
+                  emailController!.clear();
+                  passwordController!.clear();
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    SnackBar(
+                      content:
+                          Text('Success register with id ${state.response.id}'),
+                    ),
+                  );
+                }
+              },
+              builder: (context, state) {
+                if (state is RegisterLoading) {
+                  return const Center(
+                    child: CircularProgressIndicator(),
+                  );
+                }
+                return ElevatedButton(
                   onPressed: () {
-                    Navigator.of(context).push(
-                      MaterialPageRoute(
-                        builder: (context) => const LoginPage(),
-                      ),
+                    final registerRequestModel = RegisterRequestModel(
+                      name: nameController!.text,
+                      email: emailController!.text,
+                      password: passwordController!.text,
                     );
+                    context
+                        .read<RegisterBloc>()
+                        .add(SaveRegisterEvent(request: registerRequestModel));
                   },
-                  child: const Text('Already have an account'),
-                ),
-                const SizedBox(
-                  width: 10,
-                ),
-                BlocConsumer<RegisterBloc, RegisterState>(
-                  listener: (context, state) {
-                    if (state is RegisterLoaded) {
-                      nameController!.clear();
-                      emailController!.clear();
-                      passwordController!.clear();
-                      ScaffoldMessenger.of(context).showSnackBar(
-                        SnackBar(
-                          content: Text(
-                              'Success register with id ${state.response.id}'),
-                        ),
-                      );
-                    }
-                  },
-                  builder: (context, state) {
-                    if (state is RegisterLoading) {
-                      return const Center(
-                        child: CircularProgressIndicator(),
-                      );
-                    }
-                    return ElevatedButton(
-                      onPressed: () {
-                        final registerRequestModel = RegisterRequestModel(
-                          name: nameController!.text,
-                          email: emailController!.text,
-                          password: passwordController!.text,
-                        );
-                        context.read<RegisterBloc>().add(
-                            SaveRegisterEvent(request: registerRequestModel));
-                      },
-                      child: const Text('Sign Up'),
-                    );
-                  },
-                ),
-              ],
-            )
+                  child: const Text('Sign Up'),
+                );
+              },
+            ),
+            TextButton(
+              onPressed: () {
+                Navigator.of(context).push(
+                  MaterialPageRoute(
+                    builder: (context) => const LoginPage(),
+                  ),
+                );
+              },
+              child: const Text('Already have an account'),
+            ),
           ],
         ),
       ),

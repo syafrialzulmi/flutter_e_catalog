@@ -14,5 +14,3 @@ final class RegisterLoaded extends RegisterState {
     required this.response,
   });
 }
-
-final class RegisterError extends RegisterState {}

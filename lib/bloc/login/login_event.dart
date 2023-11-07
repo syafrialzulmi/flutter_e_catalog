@@ -1,4 +1,11 @@
 part of 'login_bloc.dart';
 
 @immutable
-sealed class LoginEvent {}
+abstract class LoginEvent {}
+
+class DoLoginEvent extends LoginEvent {
+  final LoginRequestModel loginRequestModel;
+  DoLoginEvent({
+    required this.loginRequestModel,
+  });
+}

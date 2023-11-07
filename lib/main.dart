@@ -18,7 +18,7 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
-      create: (context) => RegisterBloc(AuthDatasource()),
+      create: (context) => RegisterBloc(AuthDatasources()),
       child: MaterialApp(
         title: 'Flutter Demo',
         theme: ThemeData.light(
