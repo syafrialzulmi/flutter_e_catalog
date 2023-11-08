@@ -52,7 +52,7 @@ class _HomePageState extends State<HomePage> {
                 }
                 if (state is ProfileLoaded) {
                   var profile = state.profilResponseModel;
-                  print(profile.avatar);
+                  var avatar = profile.avatar;
                   return Container(
                     padding: const EdgeInsets.only(
                       left: 15,
@@ -83,7 +83,7 @@ class _HomePageState extends State<HomePage> {
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
                                 Text(
-                                  profile.name ?? '',
+                                  profile.name!.toUpperCase(),
                                   style: Theme.of(context)
                                       .textTheme
                                       .titleLarge!
@@ -94,22 +94,32 @@ class _HomePageState extends State<HomePage> {
                                         fontWeight: FontWeight.normal,
                                       ),
                                 ),
-                                Text(
-                                  profile.email ?? '',
-                                  style: Theme.of(context)
-                                      .textTheme
-                                      .titleMedium!
-                                      .copyWith(
-                                        color: Theme.of(context)
-                                            .colorScheme
-                                            .onBackground,
-                                        fontWeight: FontWeight.normal,
-                                      ),
+                                Row(
+                                  children: [
+                                    const Icon(
+                                      Icons.email_outlined,
+                                      color: Colors.grey,
+                                      size: 16,
+                                    ),
+                                    const SizedBox(
+                                      width: 10,
+                                    ),
+                                    Text(
+                                      profile.email ?? '',
+                                      style: Theme.of(context)
+                                          .textTheme
+                                          .titleMedium!
+                                          .copyWith(
+                                            color: Colors.grey,
+                                            fontWeight: FontWeight.normal,
+                                          ),
+                                    ),
+                                  ],
                                 ),
                               ],
                             ),
-                            const CircleAvatar(
-                              backgroundImage: NetworkImage(
+                            CircleAvatar(
+                              backgroundImage: NetworkImage(avatar ??
                                   'https://www.woolha.com/media/2020/03/eevee.png'),
                               backgroundColor: Colors.grey,
                               radius: 40,

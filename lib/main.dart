@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_e_catalog/bloc/profile/profile_bloc.dart';
 
 import 'package:flutter_e_catalog/bloc/register/register_bloc.dart';
 import 'package:flutter_e_catalog/bloc/login/login_bloc.dart';
@@ -24,6 +25,9 @@ class MyApp extends StatelessWidget {
         ),
         BlocProvider(
           create: (context) => LoginBloc(AuthDatasources()),
+        ),
+        BlocProvider(
+          create: (context) => ProfileBloc(AuthDatasources()),
         ),
       ],
       child: MaterialApp(
