@@ -74,10 +74,21 @@ class _RegisterPageState extends State<RegisterPage> {
                   nameController!.clear();
                   emailController!.clear();
                   passwordController!.clear();
+
                   ScaffoldMessenger.of(context).showSnackBar(
                     SnackBar(
+                      backgroundColor: Colors.blueAccent,
                       content:
                           Text('Success register with id ${state.response.id}'),
+                    ),
+                  );
+
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) {
+                        return const LoginPage();
+                      },
                     ),
                   );
                 }
