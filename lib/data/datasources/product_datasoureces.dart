@@ -47,7 +47,7 @@ class ProductDatasources {
     );
 
     final result = List<ProductResponseModel>.from(jsonDecode(response.body)
-        .map((e) => ProductResponseModel.fromJson(e))).toList();
+        .map((e) => ProductResponseModel.fromMap(e))).toList();
 
     return result;
   }

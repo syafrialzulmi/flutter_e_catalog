@@ -1,13 +1,19 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_e_catalog/data/models/response/product_response_model.dart';
 
 class DetailProductPage extends StatelessWidget {
-  const DetailProductPage({super.key});
+  const DetailProductPage({
+    super.key,
+    required this.product,
+  });
+
+  final ProductResponseModel product;
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: AppBar(
-          title: const Text('Unbranded Steel Cheese'),
+          title: Text(product.title ?? ''),
           centerTitle: false,
         ),
         body: SingleChildScrollView(
@@ -21,20 +27,26 @@ class DetailProductPage extends StatelessWidget {
                     color: Colors.redAccent,
                     borderRadius: BorderRadius.circular(5)),
                 child: Text(
-                  '728',
+                  '\$ ${product.price}',
                   style: Theme.of(context).textTheme.titleLarge!.copyWith(
                         color: Colors.white,
                         fontWeight: FontWeight.normal,
                       ),
                 ),
               ),
+              const SizedBox(
+                height: 10,
+              ),
               Text(
-                'The Football Is Good For Training And Recreational Purposes',
+                product.description ?? '',
                 textAlign: TextAlign.center,
-                style: Theme.of(context).textTheme.titleMedium!.copyWith(
-                      color: Theme.of(context).colorScheme.onBackground,
+                style: Theme.of(context).textTheme.titleSmall!.copyWith(
+                      color: Colors.grey,
                       fontWeight: FontWeight.normal,
                     ),
+              ),
+              const SizedBox(
+                height: 10,
               ),
               Container(
                 padding: const EdgeInsets.symmetric(horizontal: 10),
@@ -42,7 +54,7 @@ class DetailProductPage extends StatelessWidget {
                     color: Colors.greenAccent,
                     borderRadius: BorderRadius.circular(5)),
                 child: Text(
-                  'Shoes',
+                  product.category!.name.toString(),
                   style: Theme.of(context).textTheme.titleMedium!.copyWith(
                         color: Theme.of(context).colorScheme.onBackground,
                         fontWeight: FontWeight.normal,
@@ -61,12 +73,12 @@ class DetailProductPage extends StatelessWidget {
                   crossAxisSpacing: 20,
                   mainAxisSpacing: 20,
                 ),
-                itemCount: 5,
+                itemCount: product.images!.length,
                 itemBuilder: (context, index) {
                   return Container(
                     color: Colors.redAccent,
-                    child: const Image(
-                      image: NetworkImage('https://i.imgur.com/uDpzwEk.jpeg'),
+                    child: Image(
+                      image: NetworkImage(product.images![index]),
                       fit: BoxFit.cover,
                     ),
                   );
