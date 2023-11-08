@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_e_catalog/bloc/product/create_product/create_product_bloc.dart';
 import 'package:flutter_e_catalog/bloc/product/get_all_product/get_all_product_bloc.dart';
 import 'package:flutter_e_catalog/bloc/profile/profile_bloc.dart';
 import 'package:flutter_e_catalog/data/localsources/auth_local_storage.dart';
+import 'package:flutter_e_catalog/data/models/request/product_request_model.dart';
 import 'package:flutter_e_catalog/presentation/pages/detail_product_page.dart';
 import 'package:flutter_e_catalog/presentation/pages/login_page.dart';
 
@@ -14,6 +16,10 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
+  TextEditingController titleController = TextEditingController();
+  TextEditingController priceController = TextEditingController();
+  TextEditingController descriptionController = TextEditingController();
+
   @override
   void initState() {
     context.read<ProfileBloc>().add(GetProfileEvent());
@@ -178,9 +184,10 @@ class _HomePageState extends State<HomePage> {
                       mainAxisSpacing: 20,
                     ),
                     // itemCount: state.listProduct.length,
-                    itemCount: 5,
+                    itemCount: 2,
                     itemBuilder: (context, index) {
-                      final product = state.listProduct[index];
+                      final product =
+                          state.listProduct.reversed.toList()[index];
                       final image = product.images![0].toString();
                       return InkWell(
                         onTap: () {
@@ -296,6 +303,85 @@ class _HomePageState extends State<HomePage> {
             ),
           ],
         ),
+      ),
+      floatingActionButton: FloatingActionButton(
+        onPressed: () {
+          showDialog(
+            context: context,
+            builder: (context) {
+              return AlertDialog(
+                title: const Text('Add Product'),
+                content: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    TextField(
+                      controller: titleController,
+                      decoration: const InputDecoration(
+                        labelText: 'Product Title',
+                      ),
+                    ),
+                    TextField(
+                      controller: priceController,
+                      keyboardType: TextInputType.number,
+                      decoration: const InputDecoration(
+                        labelText: 'Product Price',
+                      ),
+                    ),
+                    TextField(
+                      controller: descriptionController,
+                      maxLines: 2,
+                      decoration: const InputDecoration(
+                        labelText: 'Product Description',
+                      ),
+                    ),
+                  ],
+                ),
+                actions: [
+                  TextButton(
+                    onPressed: () {
+                      Navigator.pop(context);
+                    },
+                    child: const Text('Cancel'),
+                  ),
+                  BlocListener<CreateProductBloc, CreateProductState>(
+                    listener: (context, state) {
+                      if (state is CreateProductLoaded) {
+                        Navigator.pop(context);
+                        context
+                            .read<GetAllProductBloc>()
+                            .add(DoGetAllProductEvent());
+                      }
+                    },
+                    child: BlocBuilder<CreateProductBloc, CreateProductState>(
+                      builder: (context, state) {
+                        if (state is CreateProductLoading) {
+                          return const Center(
+                            child: CircularProgressIndicator(),
+                          );
+                        }
+                        return ElevatedButton(
+                          onPressed: () {
+                            final productRequestModel = ProductRequestModel(
+                              title: titleController.text,
+                              price: int.parse(priceController.text),
+                              description: descriptionController.text,
+                            );
+
+                            context.read<CreateProductBloc>().add(
+                                DoCreateProductEvent(
+                                    productRequestModel: productRequestModel));
+                          },
+                          child: const Text('Save'),
+                        );
+                      },
+                    ),
+                  ),
+                ],
+              );
+            },
+          );
+        },
+        child: const Icon(Icons.add),
       ),
     );
   }

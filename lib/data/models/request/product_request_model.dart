@@ -20,7 +20,7 @@ class ProductRequestModel {
     required this.price,
     required this.description,
     this.categoryId = 1,
-    this.images = const ['https://placeimg.com/640/480/any'],
+    this.images = const ['https://i.imgur.com/Y5gHJMd.jpeg'],
   });
 
   Map<String, dynamic> toMap() {

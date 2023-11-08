@@ -9,9 +9,11 @@ class ProductDatasources {
   Future<ProductResponseModel> createProduct(
       ProductRequestModel productRequestModel) async {
     var uri = Uri.parse('${Variables.baseUrl}/products/');
+    var headers = {'Content-Type': 'application/json'};
     final response = await http.post(
       uri,
-      body: productRequestModel.toMap(),
+      body: productRequestModel.toJson(),
+      headers: headers,
     );
 
     final result = ProductResponseModel.fromJson(response.body);
